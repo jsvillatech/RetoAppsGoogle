@@ -52,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.e(">>>>", "For ");
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
-                startActivityForResult(signInIntent, 101);
+                startActivityForResult(signInIntent, 9001);
             }
         });
 
@@ -63,17 +64,20 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.e(">>>>", "For result antes if"+requestCode);
         // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 101) {
+        if (requestCode == 9001) {
+            Log.e(">>>>", "For result TASJK");
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            Log.e(">>>>", "For result after");
             try {
                 // Google Sign In was successful, authenticate with Firebase
                 GoogleSignInAccount account = task.getResult(ApiException.class);
+                Log.e(">>>>", "For result");
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-
+                Log.e(">>>>", "For result err"+e.getMessage());
                 // ...
             }
         }
@@ -91,8 +95,8 @@ public class MainActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = auth.getCurrentUser();
-
-                            Intent i = new Intent(getApplicationContext(), ProfileActivity.class);
+                            Log.e(">>>>", "For result2");
+                            Intent i = new Intent(MainActivity.this, ProfileActivity.class);
                             startActivity(i);
                             finish();
                             Toast.makeText(getApplicationContext(), "User logged in successfully", Toast.LENGTH_SHORT);
@@ -105,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = auth.getCurrentUser();
+    }
+
 
 
 }
